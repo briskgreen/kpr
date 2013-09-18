@@ -27,7 +27,7 @@ void start_process(KPR *kpr)
 		if(pid == 0)
 		{
 			if(fork() == 0)
-				execl(kpr->name,kpr->path,kpr->arg,NULL);
+				execl(kpr->path,kpr->name,kpr->arg,NULL);
 			wait(NULL);
 			_exit(0);
 		}
