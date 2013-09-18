@@ -1,6 +1,7 @@
 #include "config.h"
 
 void to_replace(char *res,int len);
+void null_free(char *p);
 
 KPR *kpr_open_config(void)
 {
@@ -69,6 +70,9 @@ void kpr_close_config(KPR *kpr)
 {
 	while(kpr->next != NULL)
 	{
+		null_free(kpr->name);
+		null_free(kpr->path);
+		null_free(kpr->arg);
 		free(kpr);
 		kpr=kpr->next;
 	}
@@ -93,4 +97,11 @@ void to_replace(char *res,int len)
 		strreplace(temp,"\n","",res,len);
 		free(temp);
 	}
+}
+
+void null_free(char *p)
+{
+	if(p == NULL)
+		return;
+	free(p);
 }
