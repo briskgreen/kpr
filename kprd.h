@@ -7,8 +7,10 @@
 
 void init_daemon(const char *path,mode_t mask);
 
-void start_process(KPR *task);
+void start_process(KPR *kpr);
 
-void process_restart(KPR *task);
+void kpr_run(KPR *kpr);
+
+void process_restart(KPR *kpr,pid_t pid);
 
 #endif

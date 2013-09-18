@@ -9,6 +9,7 @@ typedef struct node
 {
 	pid_t pid;
 	char *name;
+	char *path;
 	char *arg;
 	struct node *next;
 }KPR;
