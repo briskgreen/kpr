@@ -11,9 +11,9 @@ void init_daemon(const char *path,mode_t mask)
 	chdir(path);
 	umask(mask);
 	
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-	close(STDIN_FILENO);
+	//close(STDOUT_FILENO);
+	//close(STDERR_FILENO);
+	//close(STDIN_FILENO);
 }
 
 void start_process(KPR *kpr)
@@ -24,8 +24,8 @@ void start_process(KPR *kpr)
 	fd_set reads;
 	struct timeval timeout;
 
-	timeout.tv_sec=0;
-	timeout.tv_usec=1000;
+	timeout.tv_sec=1;
+	timeout.tv_usec=0;
 	pipe(pipefd);
 	while(kpr->next != NULL)
 	{
@@ -33,14 +33,21 @@ void start_process(KPR *kpr)
 		pid=fork();
 		if(pid == 0)
 		{
+			int e;
+			char status='\1';
+
 			if(fork() == 0)
 				if(execl(kpr->path,kpr->name,kpr->arg,NULL) == -1)
-				{
-					char status='\1';
-
 					write(pipefd[1],&status,sizeof(char));
-				}
-			wait(NULL);
+
+			wait(&e);
+			if(WIFEXITED(e))
+			{
+				if(WEXITSTATUS(e) == 2)
+					write(pipefd[1],&status,sizeof(char));
+			}
+			else
+				write(pipefd[1],&status,sizeof(char));
 			_exit(0);
 		}
 		else
