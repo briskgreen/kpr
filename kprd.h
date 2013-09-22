@@ -13,4 +13,6 @@ void kpr_run(KPR *kpr);
 
 void process_restart(KPR *kpr,pid_t pid);
 
+void clean_process(KPR *kpr,pid_t pid);
+
 #endif
